@@ -6,8 +6,8 @@ tags:
   - Workflows
   - Hello World
 template:
-    name: hello-world-actions
-    repo: hello-world-actions-template
+    name: hello-github-actions
+    repo: hello-github-actions-template
 before:
 # protect the master branch
 - type: updateBranchProtection
