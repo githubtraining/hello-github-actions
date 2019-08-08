@@ -138,10 +138,6 @@ steps:
   link: '{{ repoUrl }}/pull/2'
   actions:
   - type: gate
-    left: '%payload.check_run.status%'
-    operator: ===
-    right: completed
-  - type: gate
     left: '%payload.check_run.conclusion%'
     operator: ===
     right: success
