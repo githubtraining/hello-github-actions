@@ -86,7 +86,7 @@ steps:
   - type: respond
     with: 02.0_entrypoint-success.md
     data:
-      url: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?flow=1&filename=.github/workflows/workflow.yaml'
+      url: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?flow=1&filename=.github/workflows/main.yml'
 
 # 3 - Start your workflow file
 - title: Start your workflow file
@@ -101,14 +101,14 @@ steps:
   - type: gate
     left: '%actions.tree.data.tree%'
     operator: includes
-    right: path:/^.github/workflows/workflow.yaml$/
+    right: path:/^.github/workflows/main.yml$/
     else:
       type: respond
       with: 03.1_e-no-workflow.md
   - type: respond
     with: 03.0_workflow-block-success.md
     data:
-      url: '%payload.repository.html_url%/edit/%payload.pull_request.head.ref%/.github/workflows/workflow.yaml?pr=/%payload.repository.full_name%/pull/%payload.number%'
+      url: '%payload.repository.html_url%/edit/%payload.pull_request.head.ref%/.github/workflows/main.yml?pr=/%payload.repository.full_name%/pull/%payload.number%'
 
 # 4 - Run an action from your workflow file
 - title: Run an action from your workflow file
@@ -123,7 +123,7 @@ steps:
   - type: gate
     left: '%actions.tree.data.tree%'
     operator: includes
-    right: path:/^.github/workflows/workflow.yaml$/
+    right: path:/^.github/workflows/main.yml$/
     else:
       type: respond
       with: 03.1_e-no-workflow.md
