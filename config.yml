@@ -161,12 +161,7 @@ steps:
   link: '{{ repoUrl }}/pull/2'
   actions:
   - type: gate
-    every: true
-    gates:
-    - left: '%payload.action%'
-      operator: ===
-      right: closed
-    - left: '%payload.pull_request.merged%'
+    left: '%payload.pull_request.merged%'
   - type: createIssue
     title: Congratulations
     body: 06.0_workflow-finished.md
