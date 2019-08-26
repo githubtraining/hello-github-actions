@@ -18,6 +18,8 @@ before:
   body: 00.0_welcome.md
   comments:
     - 00.1_first-steps.md
+  data:
+    dockerfileUrl: '%payload.repository.html_url%/new/master?filename=action-a/Dockerfile'
 
 # Repo artifacts:
 # Issue 1: Welcome
