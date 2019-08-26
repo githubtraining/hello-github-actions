@@ -102,7 +102,7 @@ steps:
   - type: respond
     with: 03.0_workflow-block-success.md
     data:
-      url: '%payload.repository.html_url%/edit/%payload.pull_request.head.ref%/.github/workflows/main.yml?pr=/%payload.repository.full_name%/pull/%payload.number%'
+      workflowEditUrl: '%payload.repository.html_url%/edit/%payload.pull_request.head.ref%/.github/workflows/main.yml?pr=/%payload.repository.full_name%/pull/%payload.number%'
 
 # 4 - Run an action from your workflow file
 - title: Run an action from your workflow file
