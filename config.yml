@@ -55,6 +55,8 @@ steps:
       with: 01.1_e-no-docker.md
   - type: respond
     with: 01.0_docker-success.md
+    data:
+      actionAUrl: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=action-a/entrypoint.sh'
   - type: closeIssue
     issue: Welcome
 
