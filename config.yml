@@ -73,16 +73,6 @@ steps:
     else:
       type: respond
       with: 02.1_e-no-entrypoint.md
-  - type: gate
-    left: '%actions.tree.data.tree%'
-    operator: includes
-    right: mode:100755
-    else:
-      type: respond
-      with: 02.2_e-make-exec.md
-      data:
-        repo: '%payload.repository%'
-        branch: '%payload.pull_request.head.ref%'
   - type: respond
     with: 02.0_entrypoint-success.md
     data:
