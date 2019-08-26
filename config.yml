@@ -18,6 +18,8 @@ before:
   body: 00.0_welcome.md
   comments:
     - 00.1_first-steps.md
+  data:
+    dockerfileUrl: '%payload.repository.html_url%/new/master?filename=action-a/Dockerfile'
 
 # Repo artifacts:
 # Issue 1: Welcome
@@ -53,6 +55,8 @@ steps:
       with: 01.1_e-no-docker.md
   - type: respond
     with: 01.0_docker-success.md
+    data:
+      actionAUrl: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=action-a/entrypoint.sh'
   - type: closeIssue
     issue: Welcome
 
@@ -76,7 +80,7 @@ steps:
   - type: respond
     with: 02.0_entrypoint-success.md
     data:
-      url: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?flow=1&filename=.github/workflows/main.yml'
+      worfkflowUrl: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=.github/workflows/main.yml'
 
 # 3 - Start your workflow file
 - title: Start your workflow file
@@ -98,7 +102,7 @@ steps:
   - type: respond
     with: 03.0_workflow-block-success.md
     data:
-      url: '%payload.repository.html_url%/edit/%payload.pull_request.head.ref%/.github/workflows/main.yml?pr=/%payload.repository.full_name%/pull/%payload.number%'
+      workflowEditUrl: '%payload.repository.html_url%/edit/%payload.pull_request.head.ref%/.github/workflows/main.yml?pr=/%payload.repository.full_name%/pull/%payload.number%'
 
 # 4 - Run an action from your workflow file
 - title: Run an action from your workflow file
