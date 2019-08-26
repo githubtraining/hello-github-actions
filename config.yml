@@ -80,7 +80,7 @@ steps:
   - type: respond
     with: 02.0_entrypoint-success.md
     data:
-      url: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?flow=1&filename=.github/workflows/main.yml'
+      worfkflowUrl: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=.github/workflows/main.yml'
 
 # 3 - Start your workflow file
 - title: Start your workflow file
