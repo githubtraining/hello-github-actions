@@ -77,7 +77,7 @@ steps:
           type: respond
           with: 02.1_e-no-entrypoint.md
       - type: respond
-        with: 02.entrypoint-success.md
+        with: 02.0_entrypoint-success.md
         data:
           actionAUrl: "%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=action-a/action.yml"
 
