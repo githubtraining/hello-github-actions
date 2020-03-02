@@ -6,20 +6,20 @@ tags:
   - Workflows
   - Hello World
 template:
-    name: hello-github-actions
-    repo: hello-github-actions-template
+  name: hello-github-actions
+  repo: hello-github-actions-template
 before:
-# protect the master branch
-- type: updateBranchProtection
+  # protect the master branch
+  - type: updateBranchProtection
 
-# open issue 1 (welcome)
-- type: createIssue
-  title: Welcome
-  body: 00.0_welcome.md
-  comments:
-    - 00.1_first-steps.md
-  data:
-    dockerfileUrl: '%payload.repository.html_url%/new/master?filename=action-a/Dockerfile'
+  # open issue 1 (welcome)
+  - type: createIssue
+    title: Welcome
+    body: 00.0_welcome.md
+    comments:
+      - 00.1_first-steps.md
+    data:
+      dockerfileUrl: "%payload.repository.html_url%/new/master?filename=action-a/Dockerfile"
 
 # Repo artifacts:
 # Issue 1: Welcome
@@ -27,142 +27,162 @@ before:
 # Issue 3: Congratulations
 
 steps:
+  # 1 - Add a Dockerfile
+  - title: Add a Dockerfile
+    description: Start your action by creating a Dockerfile
+    event: pull_request
+    link: "{{ repoUrl }}/issues/1"
+    actions:
+      - type: gate
+        gates:
+          - left: "%payload.action%"
+            operator: ===
+            right: opened
+          - left: "%payload.action%"
+            operator: ===
+            right: synchronize
+      - type: getTree
+        action_id: tree
+        recursive: true
+        sha: "%payload.pull_request.head.sha%"
+      - type: gate
+        left: "%actions.tree.data.tree%"
+        operator: includes
+        right: path:action-a/Dockerfile
+        else:
+          type: respond
+          with: 01.1_e-no-docker.md
+      - type: respond
+        with: 01.0_docker-success.md
+        data:
+          actionAUrl: "%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=action-a/entrypoint.sh"
+      - type: closeIssue
+        issue: Welcome
 
-# 1 - Add a Dockerfile
-- title: Add a Dockerfile
-  description: Start your action by creating a Dockerfile
-  event: pull_request
-  link: '{{ repoUrl }}/issues/1'
-  actions:
-  - type: gate
-    gates:
-    - left: '%payload.action%'
-      operator: ===
-      right: opened
-    - left: '%payload.action%'
-      operator: ===
-      right: synchronize
-  - type: getTree
-    action_id: tree
-    recursive: true
-    sha: '%payload.pull_request.head.sha%'
-  - type: gate
-    left: '%actions.tree.data.tree%'
-    operator: includes
-    right: path:action-a/Dockerfile
-    else:
-      type: respond
-      with: 01.1_e-no-docker.md
-  - type: respond
-    with: 01.0_docker-success.md
-    data:
-      actionAUrl: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=action-a/entrypoint.sh'
-  - type: closeIssue
-    issue: Welcome
+  # 2 - Add an entrypoint script
+  - title: Add an entrypoint script
+    description: Script out how your action will run with an entrypoint script
+    event: pull_request.synchronize
+    link: "{{ repoUrl }}/pull/2"
+    actions:
+      - type: getTree
+        action_id: tree
+        recursive: true
+        sha: "%payload.pull_request.head.sha%"
+      - type: gate
+        left: "%actions.tree.data.tree%"
+        operator: includes
+        right: path:action-a/entrypoint.sh
+        else:
+          type: respond
+          with: 02.1_e-no-entrypoint.md
+      - type: respond
+        with: 02.entrypoint-success.md
+        data:
+          actionAUrl: "%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=action-a/action.yml"
 
-# 2 - Add an entrypoint script
-- title: Add an entrypoint script
-  description: Script out how your action will run with an entrypoint script
-  event: pull_request.synchronize
-  link: '{{ repoUrl }}/pull/2'
-  actions:
-  - type: getTree
-    action_id: tree
-    recursive: true
-    sha: '%payload.pull_request.head.sha%'
-  - type: gate
-    left: '%actions.tree.data.tree%'
-    operator: includes
-    right: path:action-a/entrypoint.sh
-    else:
-      type: respond
-      with: 02.1_e-no-entrypoint.md
-  - type: respond
-    with: 02.0_entrypoint-success.md
-    data:
-      worfkflowUrl: '%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=.github/workflows/main.yml'
+  # 3 - Add action metadata
+  - title: Add an action.yml file
+    description: Create the necessary metadata for the action
+    event: pull_request.synchronize
+    link: "{{ repoUrl }}/pull/2"
+    actions:
+      - type: getTree
+        action_id: tree
+        recursive: true
+        sha: "%payload.pull_request.head.sha%"
+      - type: gate
+        left: "%actions.tree.data.tree%"
+        operator: includes
+        right: path:action-a/action.yml
+        else:
+          type: respond
+          with: 03.1_e-no-actionyml.md
+      - type: respond
+        with: 03.0_actionyml-success.md
+        data:
+          worfkflowUrl: "%payload.repository.html_url%/new/%payload.pull_request.head.ref%?filename=.github/workflows/main.yml"
 
-# 3 - Start your workflow file
-- title: Start your workflow file
-  description: Get your workflow kicked off with the workflow file
-  event: pull_request.synchronize
-  link: '{{ repoUrl }}/pull/2'
-  actions:
-  - type: getTree
-    action_id: tree
-    recursive: true
-    sha: '%payload.pull_request.head.sha%'
-  - type: gate
-    left: '%actions.tree.data.tree%'
-    operator: includes
-    right: path:/^.github/workflows/main.yml$/
-    else:
-      type: respond
-      with: 03.1_e-no-workflow.md
-  - type: respond
-    with: 03.0_workflow-block-success.md
-    data:
-      workflowEditUrl: '%payload.repository.html_url%/edit/%payload.pull_request.head.ref%/.github/workflows/main.yml?pr=/%payload.repository.full_name%/pull/%payload.number%'
+  # 4 - Start your workflow file
+  - title: Start your workflow file
+    description: Get your workflow kicked off with the workflow file
+    event: pull_request.synchronize
+    link: "{{ repoUrl }}/pull/2"
+    actions:
+      - type: getTree
+        action_id: tree
+        recursive: true
+        sha: "%payload.pull_request.head.sha%"
+      - type: gate
+        left: "%actions.tree.data.tree%"
+        operator: includes
+        right: path:/^.github/workflows/main.yml$/
+        else:
+          type: respond
+          with: 04.1_e-no-workflow.md
+      - type: respond
+        with: 04.0_workflow-block-success.md
+        data:
+          workflowEditUrl: "%payload.repository.html_url%/edit/%payload.pull_request.head.ref%/.github/workflows/main.yml?pr=/%payload.repository.full_name%/pull/%payload.number%"
 
-# 4 - Run an action from your workflow file
-- title: Run an action from your workflow file
-  description: Specify a job and call actions within your workflow file
-  event: pull_request.synchronize
-  link: '{{ repoUrl }}/pull/2'
-  actions:
-  - type: getTree
-    action_id: tree
-    recursive: true
-    sha: '%payload.pull_request.head.sha%'
-  - type: gate
-    left: '%actions.tree.data.tree%'
-    operator: includes
-    right: path:/^.github/workflows/main.yml$/
-    else:
-      type: respond
-      with: 03.1_e-no-workflow.md
-  - type: respond
-    with: 04.0_trigger.md
+  # 5 - Run an action from your workflow file
+  - title: Run an action from your workflow file
+    description: Specify a job and call actions within your workflow file
+    event: pull_request.synchronize
+    link: "{{ repoUrl }}/pull/2"
+    actions:
+      - type: getTree
+        action_id: tree
+        recursive: true
+        sha: "%payload.pull_request.head.sha%"
+      - type: gate
+        left: "%actions.tree.data.tree%"
+        operator: includes
+        right: path:/^.github/workflows/main.yml$/
+        else:
+          type: respond
+          with: 04.1_e-no-workflow.md
+      - type: respond
+        with: 05.0_trigger.md
 
+  # 6 - Trigger the workflow
+  - title: Trigger the workflow
+    description: See your push trigger the workflow you've created and run your action
+    event: check_run.completed
+    link: "{{ repoUrl }}/pull/2"
+    actions:
+      - type: gate
+        left: "%payload.check_run.conclusion%"
+        operator: ===
+        right: success
+        else:
+          - type: respond
+            issue: "%payload.check_run.pull_requests.0.number%"
+            with: 06.1_e-no-run.md
+            data:
+              repo: "%payload.repository.html_url%"
+      - type: createReview
+        pullRequest: "%payload.check_run.pull_requests.0.number%"
+        body: 06.0_workflow-success.md
+        event: APPROVE
+        data:
+          repo: "%payload.repository.html_url%"
 
-# 5 - Trigger the workflow
-- title: Trigger the workflow
-  description: See your push trigger the workflow you've created and run your action
-  event: check_run.completed
-  link: '{{ repoUrl }}/pull/2'
-  actions:
-  - type: gate
-    left: '%payload.check_run.conclusion%'
-    operator: ===
-    right: success
-    else:
-    - type: respond
-      issue: '%payload.check_run.pull_requests.0.number%'
-      with: 05.1_e-no-run.md
-      data:
-        repo: '%payload.repository.html_url%'
-  - type: createReview
-    pullRequest: '%payload.check_run.pull_requests.0.number%'
-    body: 05.0_workflow-success.md
-    event: APPROVE
-    data:
-      repo: '%payload.repository.html_url%'
-
-# 6 - Incorporate the action
-- title: Incorporate the workflow
-  description: Merge your branch for the workflow to become incorporated
-  event: pull_request.closed
-  link: '{{ repoUrl }}/pull/2'
-  actions:
-  - type: gate
-    left: '%payload.pull_request.merged%'
-  - type: createIssue
-    title: Congratulations
-    body: 06.0_workflow-finished.md
-    data:
-      repo: '%payload.repository.html_url%'
-    action_id: congratsIssue
-  - type: respond
-    with: 06.1_go-to-final.md
-    data:
-      url: '%actions.congratsIssue.data.html_url%'
+  # 7 - Incorporate the action
+  - title: Incorporate the workflow
+    description: Merge your branch for the workflow to become incorporated
+    event: pull_request.closed
+    link: "{{ repoUrl }}/pull/2"
+    actions:
+      - type: gate
+        left: "%payload.pull_request.merged%"
+      - type: createIssue
+        title: Congratulations
+        body: 07.0_workflow-finished.md
+        data:
+          repo: "%payload.repository.html_url%"
+        action_id: congratsIssue
+      - type: respond
+        with: 07.1_go-to-final.md
+        data:
+          url: "%actions.congratsIssue.data.html_url%"
