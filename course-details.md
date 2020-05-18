@@ -16,7 +16,7 @@ Automation is key for streamlining your work processes, and GitHub Actions are t
 
 ## Prerequisites
 
-In this course you will work with issues and pull requests, as well as edit files. If these things are familiar to you, we recommend you take the [Introduction to GitHub]({{ host }}/githubtraining/introduction-to-github) course, first!
+In this course you will work with issues and pull requests, as well as edit files. If these things are not familiar to you, we recommend you take the [Introduction to GitHub]({{ host }}/githubtraining/introduction-to-github) course, first!
 
 ## Projects used
 
