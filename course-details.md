@@ -24,4 +24,4 @@ The main feature introduced in this course is GitHub Actions. To learn even more
 
 ## Audience
 
-Developers, DevOps engineers, students, managers teams, GitHub users, people interested in automation
+Developers, DevOps engineers, students, managers, teams, GitHub users, people interested in automation
