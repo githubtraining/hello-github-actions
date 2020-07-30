@@ -166,6 +166,7 @@ steps:
         event: APPROVE
         data:
           repo: "%payload.repository.html_url%"
+      - type: removeBranchProtection
 
   # 7 - Incorporate the action
   - title: Incorporate the workflow
