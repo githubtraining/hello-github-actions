@@ -8,7 +8,7 @@ template:
   name: hello-github-actions
   repo: hello-github-actions-template
 before:
-  # protect the master branch
+  # protect the main branch
   - type: updateBranchProtection
 
   # open issue 1 (welcome)
@@ -18,7 +18,7 @@ before:
     comments:
       - 00.1_first-steps.md
     data:
-      dockerfileUrl: "%payload.repository.html_url%/new/master?filename=action-a/Dockerfile"
+      dockerfileUrl: "%payload.repository.html_url%/new/main?filename=action-a/Dockerfile"
 
 # Repo artifacts:
 # Issue 1: Welcome
