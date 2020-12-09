@@ -23,7 +23,7 @@ This course is currently in production. It was designed to meet the learning out
     - to change the starter code for the learner, edit the [template repository](https://lab.github.com/docs/course-ownership-and-repositories#the-repositories)
 1. Commit your changes to your fork.
 1. Open a pull request with:
-    - base branch: the master branch of this repository
+    - base branch: the main branch of this repository
     - compare branch: the branch containing your commits in your fork
 1. Wait for a review from the Learning Lab team, which will be automatically requested
 
@@ -61,4 +61,4 @@ There are many ways you can contribute! Here are just a few:
 
 ### Releasing
 
-When your course branch has been merged into `master`, the [course version](https://lab.github.com/docs/course-versioning) on Learning Lab will automatically update and any new learners will receive the updated version of the course. There are no additional requirements on your part.
+When your course branch has been merged into `main`, the [course version](https://lab.github.com/docs/course-versioning) on Learning Lab will automatically update and any new learners will receive the updated version of the course. There are no additional requirements on your part.
