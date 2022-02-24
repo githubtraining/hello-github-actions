@@ -23,3 +23,5 @@ We :heart: our community and take great care to ensure it is fun, safe and rewar
 All Learning Lab course repositories are licensed under [CC-BY-4.0](../LICENSE) (c) 2019 GitHub, Inc. The template repositories associated with each course may have different licenses.
 
 When using the GitHub logos, be sure to follow the [GitHub logo guidelines](https://github.com/logos)
+Staging test #1:
+Staging test #2: -- You can safely remove this line --
